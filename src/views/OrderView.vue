@@ -74,7 +74,7 @@
 import cartTable from '@/components/CartTable.vue';
 import ApiLoading from '@/components/ApiLoading.vue';
 import DeleteAllCartMessage from '@/components/DeleteAllCartMessage.vue';
-import NoCartCantGoFromAlert from '@/utils/NoCartCantGoFromAlert.js';
+import NoCartCantGoFromAlert from '@/utils/noCartCantGoFromAlert.js';
 import emitter from '@/utils/emitter.js';
 export default {
   mixins: [NoCartCantGoFromAlert],

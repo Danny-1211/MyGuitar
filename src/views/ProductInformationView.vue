@@ -83,8 +83,8 @@
 </template>
 
 <script>
-import AddSuccessMessageAlert from '@/utils/AddSuccessMessageAlert.js';
-import AddFailMessageAlert from '@/utils/AddFailMessageAlert.js';
+import AddSuccessMessageAlert from '@/utils/addSuccessMessageAlert.js';
+import AddFailMessageAlert from '@/utils/addFailMessageAlert.js';
 import ApiLoading from '@/components/ApiLoading.vue';
 import emitter from '@/utils/emitter.js';
 export default {

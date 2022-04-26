@@ -32,8 +32,8 @@
 
 <script>
 import Modal from 'bootstrap/js/dist/modal.js';
-import AddFailMessageAlert from '@/utils/AddFailMessageAlert.js';
-import EditSuccessMessageAlert from '@/utils/EditSuccessMessageAlert.js';
+import AddFailMessageAlert from '@/utils/addFailMessageAlert.js';
+import EditSuccessMessageAlert from '@/utils/editSuccessMessageAlert.js';
 import emitter from '@/utils/emitter.js';
 export default {
   mixins: [AddFailMessageAlert, EditSuccessMessageAlert],
