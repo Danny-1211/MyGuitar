@@ -3,10 +3,10 @@
     <div class="row ">
       <nav class="navbar navbar-expand-lg  fixed-top  navbar-dark bg-secondary  opacity-75 fs-6 ">
         <router-link to="/" class="navbar-brand mx-4  text-white ">MyGuitar</router-link>
-        <button class="navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler " type="button" @click="toggleHam" >
+          <span class="navbar-toggler-icon" ></span>
         </button>
-        <div class="collapse navbar-collapse " id="navbarNav" ref="collapse">
+        <div class="collapse navbar-collapse "  ref="collapse">
           <ul class="navbar-nav ms-auto  bg-secondary">
             <li class="nav-item  py-1  px-2 link-success ">
               <router-link to="/" class="nav-link text-white" @click="closeHam">首頁</router-link>
@@ -68,6 +68,9 @@ export default {
     },
     closeHam () {
       this.collapse.hide();
+    },
+    toggleHam () {
+      this.collapse.toggle();
     }
   },
   mounted () {
