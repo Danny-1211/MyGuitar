@@ -74,9 +74,11 @@ export default {
           .then(res => {
             this.products = res.data.products;
             this.$router.push('/productList');
+            this.$refs.load.timeIsOut();
           })
           .catch(err => {
             console.log(err);
+            this.$refs.load.timeIsOut();
           });
       } else {
         this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${category}`)

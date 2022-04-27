@@ -76,9 +76,11 @@ export default {
           this.orderData = res.data.order;
           this.user = res.data.order.user;
           this.orderProductForTable = res.data.order.products;
+          this.$refs.load.timeIsOut();
         })
         .catch(err => {
           console.log(err);
+          this.$refs.load.timeIsOut();
         });
     },
     payOrder (orderId) {

@@ -112,9 +112,11 @@ export default {
           } else {
             this.clearAllCartBoolean = false;
           }
+          this.$refs.load.timeIsOut();
         })
         .catch(err => {
           console.log(err);
+          this.$refs.load.timeIsOut();
         });
     },
     deleteCart (item) {
