@@ -111,9 +111,11 @@ export default {
           this.mp3Name = this.information.vid;
           this.sameCategory = this.information.category;
           this.getSameProduct(this.sameCategory);
+          this.$refs.load.timeIsOut();
         })
         .catch(err => {
           console.log(err);
+          this.$refs.load.timeIsOut();
         });
     },
     addCart (item, quality) {

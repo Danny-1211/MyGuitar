@@ -26,8 +26,11 @@ export default {
     doAjax () {
       this.isLoading = true;
       setTimeout(() => {
-        this.isLoading = false;
+        // this.isLoading = false;
       }, 1500);
+    },
+    timeIsOut () {
+      this.isLoading = false;
     }
   }
 };

@@ -58,9 +58,11 @@ export default {
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/articles`)
         .then(res => {
           this.articleData = res.data.articles;
+          this.$refs.load.timeIsOut();
         })
         .catch(err => {
           console.log(err);
+          this.$refs.load.timeIsOut();
         });
     }
   },
