@@ -86,9 +86,11 @@ export default {
             this.products = res.data.products;
             this.selected = category;
             this.$router.push(`/productList/${this.selected}`);
+            this.$refs.load.timeIsOut();
           })
           .catch(err => {
             console.log(err);
+            this.$refs.load.timeIsOut();
           });
       }
     },
