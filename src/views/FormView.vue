@@ -7,10 +7,16 @@
         <h1 class="text-white">填寫聯絡資料</h1>
       </div>
     </div>
-    <div class="row justify-content-center mb-3">
-      <div class="col-lg-4 col-md-4 col-sm-12 px-3">
-        <div class="progress" style="height: 30px;">
-          <div class="progress-bar bg-info" role="progressbar" style="width:50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">2. 填寫聯絡資料</div>
+    <div class="row justify-content-around mb-3">
+      <div class="col-lg-4 col-md-6 col-sm-12 d-flex px-3 ">
+        <div class="stepHint border border-gray py-3 px-3 mx-2 text-white opacity-50" style=" width:10rem; height:3.5rem; background-color:#627364;">
+          <p class="fw-bold">確認商品</p>
+        </div>
+        <div class="stepHint border border-gray py-3 px-3 mx-2 text-white " style=" width:10rem; height:3.5rem; background-color:#627364;">
+          <p class="fw-bold">建立訂單</p>
+        </div>
+        <div class="stepHint border border-gray py-3 px-3 mx-2 text-white opacity-50" style=" width:10rem; height:3.5rem; background-color:#627364;">
+          <p class="fw-bold">訂購完成</p>
         </div>
       </div>
     </div>
