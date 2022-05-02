@@ -10,7 +10,7 @@
     <div class="row justify-content-center mb-3">
       <div class="col-lg-4 col-md-4 col-sm-12 px-3">
         <div class="progress " style="height: 30px;">
-          <div class="progress-bar bg-info" role="progressbar" style="width:75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">3. 訂購完成</div>
+          <div class="progress-bar bg-info fs-6" role="progressbar" style="width:75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">訂購完成</div>
         </div>
       </div>
     </div>
