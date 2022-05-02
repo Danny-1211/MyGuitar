@@ -7,7 +7,6 @@
         <h1 class="text-white">訂購成功!</h1>
       </div>
     </div>
-<<<<<<< HEAD
     <div class="row justify-content-around mb-3">
       <div class="col-lg-4 col-md-6 col-sm-12 d-flex px-3  ">
         <div class="stepHint border border-gray py-3 px-3 mx-2 text-white opacity-50" style=" width:10rem; height:3.5rem; background-color:#627364;">
@@ -18,12 +17,6 @@
         </div>
         <div class="stepHint border border-gray py-3 px-3 mx-2 text-white" style=" width:10rem; height:3.5rem; background-color:#627364;">
           <p class="fw-bold">訂購完成</p>
-=======
-    <div class="row justify-content-center mb-3">
-      <div class="col-lg-4 col-md-4 col-sm-12 px-3">
-        <div class="progress " style="height: 30px;">
-          <div class="progress-bar bg-info fs-6" role="progressbar" style="width:75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">訂購完成</div>
->>>>>>> 79b20d6675760c3f050d53a10cf414fa5a066427
         </div>
       </div>
     </div>
