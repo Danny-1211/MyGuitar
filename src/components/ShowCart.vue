@@ -31,13 +31,13 @@
         </table>
         <div class="row">
           <div class="col">
-            <button class="goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goOrder">結帳去</button>
+            <button type="button" class="goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goOrder">結帳去</button>
           </div>
         </div>
       </template>
       <div class="nothinginTheCart" v-else>
         <p class="text-info">購物車無任何商品</p>
-        <button class=" goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goProduct">前往購物</button>
+        <button type="button" class=" goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goProduct">前往購物</button>
       </div>
     </div>
   </div>
@@ -70,7 +70,6 @@ export default {
     deleteCart (item) {
       this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`)
         .then(res => {
-          this.getCartList();
           emitter.emit('get-cart');
           emitter.emit('delete-cart');
         })

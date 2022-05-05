@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="row ">
+    <div class="row justify-content-center ">
       <nav class="navbar navbar-expand-lg  fixed-top  navbar-dark bg-secondary  opacity-75 fs-6 ">
         <router-link to="/" class="navbar-brand mx-4  text-white ">MyGuitar</router-link>
         <button class="navbar-toggler " type="button" @click="toggleHam" >
@@ -21,7 +21,7 @@
               <router-link to="/order" class="nav-link  text-white"  @click="closeHam">購物車</router-link>
             </li>
             <li class="nav-item py-2 px-2">
-              <button class=" btn btn-sm position-relative" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"  @click="closeHam" >
+              <button type="button" class=" btn btn-sm position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" role="button" aria-controls="offcanvasExample"  @click="closeHam" >
                 <img src="../assets/img/shopping_cart_white_24dp.svg" alt="cart" class="w-100">
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cartList.length }}<span class="visually-hidden">unread messages</span>
                 </span>

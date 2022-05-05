@@ -11,6 +11,12 @@ export default {
   components: {
     FrontNavbar,
     FooterPage
+  },
+  watch: {
+    $route (to) {
+      const nowTitle = to.meta.title || 'MyGuitar';
+      document.title = nowTitle;
+    }
   }
 };
 </script>

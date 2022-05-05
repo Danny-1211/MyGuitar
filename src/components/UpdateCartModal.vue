@@ -70,6 +70,7 @@ export default {
           });
       } else {
         this.showAlert();
+        this.productTemp.qty = this.tempProduct.qty;
       }
     },
     getCart () {

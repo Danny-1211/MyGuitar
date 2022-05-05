@@ -29,17 +29,17 @@
       </div>
     </div>
     <div class="row justify-content-center px-5 py-5  bg-primary"> <!--商品按鈕-->
-      <div class="col-12 col-lg-5 col-md-6">
+      <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3 mb-4">
         <router-link to="/productList/Martin">
           <div class=" item card text-white bg-primary border-0 opacity-75 ">
-            <img src="../assets/img/gabriel-gurrola-2UuhMZEChdc-unsplash.jpg" class="card-img w-100" alt="Martin">
+            <img src="../assets/img/adi-goldstein-vH2vj_3_IeU-unsplash.jpg" class="card-img w-100" alt="Martin">
             <div class="card-img-overlay justify-content-center   d-flex align-items-center">
               <router-link to="/productList/Martin">夢想- <br> Martin</router-link>
             </div>
           </div>
         </router-link>
       </div>
-      <div class="col-12 col-lg-5 col-md-6">
+      <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3 mb-4">
         <router-link to="/productList/Dowina">
           <div class=" item card text-white bg-primary border-0 opacity-75">
             <img src="../assets/img/Dollarphotoclub_67587098-1536x1017.jpg" class="card-img w-100" alt="Dowina">
@@ -49,7 +49,7 @@
           </div>
         </router-link>
       </div>
-      <div class="col-12 col-lg-5 col-md-6">
+      <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3">
         <router-link to="/productList/Eastman">
           <div class=" item card text-white bg-primary border-0 opacity-75">
             <img src="../assets/img/eastman.jpg" class="card-img w-100" alt="Eastman">
@@ -59,7 +59,7 @@
           </div>
         </router-link>
       </div>
-      <div class="col-12 col-lg-5 col-md-6">
+      <div class="col-12  col-sm-12 col-lg-5 col-md-12 mt-3 ">
         <router-link to="/productList/Pre-war">
           <div class=" item card text-white bg-primary border-0 opacity-75">
             <img src="../assets/img/pre-war.jpg" class="card-img w-100" alt="Pre-war">
@@ -77,7 +77,7 @@
     </div>
     <div class="row justify-content-around px-5 py-5 bg-primary"> <!--文章-->
       <div class="col-12 col-md-3" v-for="item in articleData" :key="item.id">
-        <div class="article" :style="{ backgroundImage: 'url(' + item.image + ')' }" >
+        <div class="article" :style="{ backgroundImage: `url(${item.image})` }" >
           <router-link :to="`/articleList/${ item.id }`">{{ item.title }}</router-link>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 85%;
+    opacity: 75%;
     position: relative;
       .bannerText{
         position: absolute;

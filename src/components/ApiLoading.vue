@@ -1,6 +1,6 @@
 <template>
   <div class="vld-parent">
-    <loading :active="isLoading" :can-cancel="true"  :is-full-page="fullPage" :color="'#43342F'">
+    <loading :active="isLoading" :can-cancel="true"  :is-full-page="true" :color="'#43342F'">
       <div class="loadingio-spinner-spin-nwqkzohoq6o"><div class="ldio-6grgxnrkcz">
         <div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div>
       </div></div>
@@ -25,9 +25,6 @@ export default {
   methods: {
     doAjax () {
       this.isLoading = true;
-      setTimeout(() => {
-        // this.isLoading = false;
-      }, 1500);
     },
     timeIsOut () {
       this.isLoading = false;
