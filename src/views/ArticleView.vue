@@ -4,7 +4,7 @@
       <div class="col-12 col-md-12 col-lg-12 col-sm-12 ">
         <div class="banner ">
           <div class="bannerText text-white">
-            <h2 class="py-2">不知道怎麼選?!</h2>
+            <h1 class="py-2">不知道怎麼選?!</h1>
             <h2 class="py-2">進來看看吧!</h2>
           </div>
         </div>
@@ -17,7 +17,7 @@
       <div class="articleText  px-5 col-12 col-sm-12 col-md-8 col-lg-5 text-white text-start" >
         <div class="row mb-5" >
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <h1>{{ item.title }}</h1>
+            <h2>{{ item.title }}</h2>
           </div>
         </div>
         <div class="row mb-5" >
