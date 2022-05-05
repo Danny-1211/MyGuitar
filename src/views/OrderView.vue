@@ -8,7 +8,7 @@
       </div>
     <div class="col-12 col-md-12 col-lg-4 col-sm-12">
       <div class="buttonG">
-        <img src="../assets/img/arrow_back_ios_white_24dp.svg" alt="" srcset="">
+        <img src="../assets/img/arrow_back_ios_white_24dp.svg" alt="arrow">
         <button class="goProductbtn btn btn-lg px-3 py-2" type="button" id="continue" @click="goProductList()">繼續選購</button>
       </div>
     </div>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="row"> <!--cartTable-->
-      <cartTable :get-cart="cartData" @delete-cart="deleteCart" @get-cart-order="getCartList" />
+      <CartTable :get-cart="cartData" @delete-cart="deleteCart" @get-cart-order="getCartList" />
     </div>
     <div class="row justify-content-center pt-5 px-5">
       <div class="col-12 col-sm-12 col-lg-5 col-md-10">
@@ -35,17 +35,20 @@
           <input type="text" class="form-control text-info ps-2" v-model="couponInput" placeholder="試試 MyGuiTar555" aria-label="coupon" aria-describedby="button-addon2">
           <button class="actionBtn btn btn-outline" type="button button-outline px-3 py-2" id="button-addon2" @click="useCoupon(couponInput)">送出</button>
         </div>
-        <label class="form-check-label" id="couponCheck" v-if="couponCheck">
-          <p class="text-success">{{ couponCheck.message }}</p>
-        </label>
-        <label class="form-check-label" id="couponCheck" v-else>
+        <label class="form-check-label" id="couponCheck"  v-if="couponBoolean">
           <p class="text-danger">請輸入優惠碼:MyGuiTar555</p>
           <p class="text-danger">p.s. 請確認商品後，再輸入優惠碼</p>
+        </label>
+        <label class="form-check-label" id="couponCheck" v-if="rightCoupon">
+          <p class="text-success" >{{ couponCheck.message }}</p>
+        </label>
+        <label class="form-check-label" id="couponCheck"  v-if="errorCouponMessage">
+          <p class="text-danger">無此優惠卷，試試 MyGuiTar555 </p>
         </label>
       </div>
     </div>
     <div class="row justify-content-end ">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-3">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4">
         <div class="next justify-content-start">
           <button type="button" class="actionBtn btn btn-lg px-3 py-2 mx-2" :disabled="clearAllCartBoolean === false" @click="openDeleteAllTip">清空購物車</button>
           <button type="button" class="btn btn-lg btn-primary px-3 py-2 mx-2" @click="goForm()">下一步</button>
@@ -77,7 +80,7 @@
 </template>
 
 <script>
-import cartTable from '@/components/CartTable.vue';
+import CartTable from '@/components/CartTable.vue';
 import ApiLoading from '@/components/ApiLoading.vue';
 import DeleteAllCartMessage from '@/components/DeleteAllCartMessage.vue';
 import NoCartCantGoFromAlert from '@/utils/noCartCantGoFromAlert.js';
@@ -85,7 +88,7 @@ import emitter from '@/utils/emitter.js';
 export default {
   mixins: [NoCartCantGoFromAlert],
   components: {
-    cartTable,
+    CartTable,
     ApiLoading,
     DeleteAllCartMessage
   },
@@ -94,7 +97,10 @@ export default {
       cartData: [],
       couponInput: '',
       couponCheck: '',
-      clearAllCartBoolean: false
+      clearAllCartBoolean: false,
+      couponBoolean: true, // 一開始優惠卷提示
+      errorCouponMessage: false, // 輸入錯誤優惠卷
+      rightCoupon: false
     };
   },
   methods: {
@@ -153,11 +159,16 @@ export default {
         .then(res => {
           this.$refs.load.doAjax();
           this.couponCheck = res.data;
+          this.couponBoolean = false;
+          this.rightCoupon = true;
           this.getCartList();
           emitter.emit('get-cart');
         })
         .catch(err => {
           console.log(err);
+          this.errorCouponMessage = true;
+          this.couponBoolean = false;
+          this.rightCoupon = false;
         });
     },
     openDeleteAllTip () {
@@ -197,13 +208,12 @@ export default {
 }
 .actionBtn{
   text-align: center;
-  font-size:1.5rem;
+  font-size:20px;
   color:#627364;
-  transition:all 1s 0s ;
   border: 1px solid #627364;
 }
 .actionBtn:hover{
-  background-color: #51423C;
+  background-color: #627364;
   color:white;
 }
 .next{

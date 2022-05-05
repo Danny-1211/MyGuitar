@@ -4,7 +4,7 @@
       <div class="bannerText justify-content-center">
         <h1>404</h1>
         <h2>完蛋!找不到網頁哩</h2>
-        <router-link to="/" class="btn btn-lg btn-outline">返回首頁</router-link>
+        <router-link to="/" class="button">返回首頁</router-link>
       </div>
     </div>
   </div>
@@ -31,8 +31,8 @@
       right:30%;
       line-height: 5.5rem;
     }
-    a:hover{
-      transition: 2s 0s ease;
+    .button{
+      text-decoration: none;
       color:#43342F;
     }
 }

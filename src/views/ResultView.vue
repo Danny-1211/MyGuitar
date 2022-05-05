@@ -57,7 +57,6 @@
 
 <script>
 import ResultTable from '@/components/ResultTable.vue';
-import emitter from '@/utils/emitter.js';
 import ApiLoading from '@/components/ApiLoading.vue';
 export default {
   components: {
@@ -92,7 +91,6 @@ export default {
     payOrder (orderId) {
       this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/pay/${orderId}`)
         .then(res => {
-          emitter.emit('get-cart');
           this.$router.push('/success');
         })
         .catch(err => {

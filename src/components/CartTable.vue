@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <div class="row justify-content-center pt-5 bg-white">
-      <div class="col-10 col-sm-10 col-lg-10 col-md-10" >
+    <div class="row justify-content-center pt-5 bg-white"  v-if="cartData.final_total !== 0">
+      <div class="col-10 col-sm-10 col-lg-10 col-md-10">
         <table class="table">
           <thead>
             <tr>
@@ -29,6 +29,15 @@
         </table>
       </div>
     </div>
+    <div class="row justify-content-center pt-5 bg-white" v-else>
+      <div class="col-10 col-sm-12 col-lg-10 col-md-10">
+        <p class="fw-bold text-info mb-2">購物車無任何商品</p>
+        <div class="mb-3">
+          <img src="../assets/img/undraw_shopping_app_flsj.svg" alt="shopping" class="w-25">
+        </div>
+        <button type="button" class="btn btn-outline-info  px-3 py-2 " @click="goProduct">前往購物</button>
+      </div>
+    </div>
   </div>
   <UpdateModal ref="edit" :temp-product="SingleProductForModal" @get-cart="getCartOrderEmit" />
   <DeleteSureMessageAlert ref="sureDelete" :item="SingleProductForModal" @delete-cart="deleteCartEmit (SingleProductForModal)" />
@@ -38,7 +47,7 @@
 import UpdateModal from '@/components/UpdateCartModal.vue';
 import DeleteSureMessageAlert from '@/components/DeleteSureMessageAlert.vue';
 export default {
-  emits: ['deleteCartEmit', 'getCartOrderEmit'],
+  emits: ['delete-cart', 'get-cart-order'],
   props: ['getCart'],
   components: {
     UpdateModal,
@@ -61,6 +70,9 @@ export default {
     deleteCartEmit (item) {
       this.$emit('delete-cart', item);
     },
+    goProduct () {
+      this.$router.push('/productList');
+    },
     openTip (item) {
       this.SingleProductForModal = { ...item };
       this.$refs.sureDelete.tip();
@@ -75,6 +87,7 @@ export default {
   },
   mounted () {
     this.cartData = this.getCart;
+    console.log(this.cartData);
   }
 };
 </script>
@@ -87,7 +100,6 @@ export default {
 }
 button{
   text-align: center;
-  transition:all 1s 0s ;
 }
 button:hover{
   background-color: #51423C;

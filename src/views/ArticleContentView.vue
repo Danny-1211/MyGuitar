@@ -15,7 +15,7 @@
     </div>
     <div class="row justify-content-center">
       <div class="col-10 col-sm-10 col-md-10 col-lg-10 ">
-        <img :src="article.image" class="w-100" alt="article.title">
+        <img :src="article.image" class="w-100" :alt="article.title">
       </div>
     </div>
     <div class="row justify-content-center">
