@@ -8,7 +8,7 @@
 
 ## 🧩 專案介紹 | Overview
 
-MyGuitar 是一套以 Vue 3 Option API 為核心的吉他電商，提供商品列表、商品詳情、購物車、結帳表單與訂單查詢等完整購物流程。專案整合 Bootstrap 5 打造響應式介面，並使用 vee-validate 處理表單驗證、Swiper 實現商品輪播、mitt 進行跨元件事件溝通。
+MyGuitar 是一套以 Vue3 Option API 為核心的吉他電商，提供商品列表、商品詳情、購物車、結帳表單與訂單查詢等完整購物流程。專案整合 Bootstrap 5 打造響應式介面，並使用 vee-validate 處理表單驗證、Swiper 實現商品輪播、mitt 進行跨元件事件溝通。
 
 ---
 
