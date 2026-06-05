@@ -1,4 +1,4 @@
-# 🎸 MyGuitar | 吉他電商前端系統
+# 🎸 MyGuitar | 吉他電商
 
 基於 Vue 3 與 Bootstrap 5 開發的吉他電商前端應用，整合 Axios 進行 RESTful API 串接，涵蓋商品瀏覽、購物車管理、訂單流程與文章閱讀等核心功能。
 
