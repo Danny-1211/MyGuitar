@@ -32,12 +32,18 @@
 
 <script>
 import Modal from 'bootstrap/js/dist/modal.js';
-import AddFailMessageAlert from '@/utils/addFailMessageAlert.js';
-import EditSuccessMessageAlert from '@/utils/editSuccessMessageAlert.js';
 import emitter from '@/utils/emitter.js';
+import swal from '@/utils/swal.js';
+import { updateCartItem } from '@/controllers/CartController';
+import { showFailAlert, showEditSuccessAlert } from '@/utils/useAlert.js';
+import { validateQuantity } from '@/utils/validators.js';
 export default {
-  mixins: [AddFailMessageAlert, EditSuccessMessageAlert],
-  props: ['tempProduct'],
+  props: {
+    tempProduct: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       editModal: '',
@@ -52,24 +58,18 @@ export default {
     }
   },
   methods: {
-    editCart (quality) {
-      const confirm = /^[-+]?[0-9]+\.[0-9]+$/; // 浮點數正規表達
-      if (!confirm.test(quality) && quality > 0 && quality <= 20) {
-        const data = {
-          product_id: this.productTemp.product_id,
-          qty: quality
-        };
-        this.$http.put(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${this.productTemp.id}`, { data: data })
-          .then(res => {
-            this.editSucessShowAlert();
-            this.getCart();
-            emitter.emit('get-cart');
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    async editCart (quality) {
+      if (validateQuantity(quality)) {
+        try {
+          await updateCartItem(this.productTemp.id, this.productTemp.product_id, quality);
+          showEditSuccessAlert();
+          this.getCart();
+          emitter.emit('get-cart');
+        } catch {
+          swal.fire('', '修改失敗，請稍後再試', 'error');
+        }
       } else {
-        this.showAlert();
+        showFailAlert();
         this.productTemp.qty = this.tempProduct.qty;
       }
     },
@@ -89,10 +89,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.btn {
-  text-align: center;
-  font-size:1rem;
-}
-</style>

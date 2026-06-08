@@ -31,13 +31,13 @@
         </table>
         <div class="row">
           <div class="col">
-            <button type="button" class="goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goOrder">結帳去</button>
+            <button type="button" class="goBtn btn btn-lg px-3 py-2 text-center text-decoration-none fs-5" data-bs-dismiss="offcanvas" @click="goOrder">結帳去</button>
           </div>
         </div>
       </template>
       <div class="nothinginTheCart" v-else>
         <p class="text-info">購物車無任何商品</p>
-        <button type="button" class=" goBtn btn-outline btn-lg px-3 py-2" data-bs-dismiss="offcanvas" @click="goProduct">前往購物</button>
+        <button type="button" class="goBtn btn btn-lg px-3 py-2 text-center text-decoration-none fs-5" data-bs-dismiss="offcanvas" @click="goProduct">前往購物</button>
       </div>
     </div>
   </div>
@@ -45,6 +45,7 @@
 
 <script>
 import emitter from '@/utils/emitter.js';
+import { getCart, deleteCartItem } from '@/controllers/CartController';
 export default {
   data () {
     return {
@@ -58,24 +59,21 @@ export default {
     goOrder () {
       this.$router.push('/order');
     },
-    getCartList () {
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
-        .then(res => {
-          this.cartList = res.data.data;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async getCartList () {
+      try {
+        this.cartList = await getCart();
+      } catch (err) {
+        console.log(err);
+      }
     },
-    deleteCart (item) {
-      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`)
-        .then(res => {
-          emitter.emit('get-cart');
-          emitter.emit('delete-cart');
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async deleteCart (item) {
+      try {
+        await deleteCartItem(item.id);
+        emitter.emit('get-cart');
+        emitter.emit('delete-cart');
+      } catch (err) {
+        this.$swal('', '刪除失敗，請稍後再試', 'error');
+      }
     }
   },
   mounted () {
@@ -83,24 +81,13 @@ export default {
     emitter.on('get-cart', () => {
       this.getCartList();
     });
-    emitter.on('delete-cart', () => {
-      this.getCartList();
-    });
+  },
+  unmounted () {
+    emitter.off('get-cart');
   }
 };
 </script>
 
-<style lang="scss">
-.goBtn{
-  text-align: center;
-  font-size:1.5rem;
-  transition:all 1s 0s ;
-  border: 1px solid #627364;
-  text-decoration: none;
-  color:#627364;
-}
-.goOrderBtn:hover{
-  background-color: #51423C;
-  color:white;
-}
+<style lang="scss" scoped>
+@import '../assets/stylesheets/components/show-cart';
 </style>

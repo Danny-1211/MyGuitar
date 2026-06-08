@@ -4,7 +4,7 @@
     </div>
     <div class="row py-5 px-5 justify-content-center bg-primary" >
       <div class="col-12 col-sm-12 col-md-12 col-lg-5 ">
-        <img v-bind:src="information.imageUrl" class="w-75 border" :alt="information.title">
+        <img :src="information.imageUrl" class="w-75 border" :alt="information.title">
       </div>
       <div class="col-12 col-sm-12 col-md-6" >
         <div class="row justify-content-center my-3 " >
@@ -25,8 +25,8 @@
         <div class="row justify-content-start mb-4">
           <div class="col-sm-12 col-lg-6 col-md-12" style="text-align:left;">
             <div class="input-group input-group-md mb-3">
-              <input type="number" class="form-control input-group-sm fs-5 ps-2 text-info" placeholder="請輸入數量" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="quality">
-              <button type="button" class="btn btn-lg text-white px-3 py-2" @click="addCart(information,quality)">
+              <input type="number" class="form-control input-group-sm fs-5 ps-2 text-info" placeholder="請輸入數量" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="qty">
+              <button type="button" class="btn btn-lg text-white px-3 py-2 fs-5 border border-white" @click="addCart(information, qty)">
                 加入購物車
               </button>
             </div>
@@ -52,7 +52,7 @@
     <div class="row py-5 px-5 justify-content-center bg-primary">
       <vue-plyr>
         <div class="plyr__video-embed" ref="plyr">
-          <iframe style="width:900px; height:500px;" v-bind:src="`${ information.vid }`" allowtransparency allowfullscreen allow="autoplay"></iframe>
+          <iframe style="width:900px; height:500px;" :src="`${ information.vid }`" allowtransparency allowfullscreen allow="autoplay"></iframe>
         </div>
       </vue-plyr>
     </div>
@@ -63,13 +63,13 @@
     </div>
     <div class="row justify-content-center px-5 py-4 bg-primary"> <!--card-->
       <div class="col-12 col-lg-3 col-md-3 col-sm-12 mb-2"  v-for=" item in sameProduct" :key="item.id">
-        <router-link :to="`/productInfor/${ item.id }`" class="link text-primary">
-          <div class="card border-0 w-100 bg-primary">
-            <div class="pic w-80 px-5">
+        <router-link :to="`/productInfor/${ item.id }`" class="link text-primary text-decoration-none">
+          <div class="card border-0 w-100 bg-primary position-relative">
+            <div class="pic w-80 px-5 overflow-hidden">
               <img :src="item.imageUrl" class="card-img w-100" :alt="item.title">
             </div>
-            <div class=" over card-img-overlay">
-              <router-link :to="`/productInfor/${ item.id }`" class="link text-white">了解更多</router-link>
+            <div class="over card-img-overlay position-absolute">
+              <router-link :to="`/productInfor/${ item.id }`" class="link text-white text-decoration-none">了解更多</router-link>
             </div>
             <div class="card-body px-5 py-2 text-start mt-2 ">
               <h5 class="card-title mb-2 text-white">{{ item.title }}</h5>
@@ -83,80 +83,65 @@
 </template>
 
 <script>
-import AddSuccessMessageAlert from '@/utils/addSuccessMessageAlert.js';
-import AddFailMessageAlert from '@/utils/addFailMessageAlert.js';
 import ApiLoading from '@/components/ApiLoading.vue';
 import emitter from '@/utils/emitter.js';
+import swal from '@/utils/swal.js';
+import { getProductById, getSameProducts } from '@/controllers/ProductController';
+import { addToCart } from '@/controllers/CartController';
+import { withLoading } from '@/utils/useAsyncData.js';
+import { showSuccessAlert, showFailAlert } from '@/utils/useAlert.js';
+import { validateQuantity } from '@/utils/validators.js';
 export default {
-  mixins: [AddFailMessageAlert, AddSuccessMessageAlert],
   components: {
     ApiLoading
   },
   data () {
     return {
-      information: [],
+      information: {},
       sameProduct: [],
       sameCategory: '',
-      quality: 1,
-      pageId: this.$route.params.id,
-      mp3Name: ''
+      qty: 1,
+      pageId: this.$route.params.id
     };
   },
   methods: {
-    getProductInformation (productId) {
-      this.$refs.load.doAjax();
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/product/${productId}`)
-        .then(res => {
-          this.information = res.data.product;
-          this.mp3Name = this.information.vid;
+    async getProductInformation (productId) {
+      await withLoading(
+        this.$refs.load,
+        async () => {
+          this.information = await getProductById(productId);
           this.sameCategory = this.information.category;
-          this.getSameProduct(this.sameCategory);
-          this.$refs.load.timeIsOut();
-        })
-        .catch(err => {
-          console.log(err);
-          this.$refs.load.timeIsOut();
-        });
+          await this.getSameProduct(this.sameCategory);
+        },
+        '商品載入失敗，請稍後再試'
+      );
     },
-    addCart (item, quality) {
-      this.tempData = item;
-      const confirm = /^[-+]?[0-9]+\.[0-9]+$/; // 浮點數正規表達
-      if (!confirm.test(quality) && quality > 0 && quality <= 20) {
-        const write = {
-          product_id: this.tempData.id,
-          qty: this.quality
-        };
-        this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`, { data: write })
-          .then(res => {
-            this.showSuccessAlert();
-            emitter.emit('get-cart');
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    async addCart (item, qty) {
+      if (validateQuantity(qty)) {
+        try {
+          await addToCart(item.id, qty);
+          showSuccessAlert();
+          emitter.emit('get-cart');
+        } catch {
+          swal.fire('', '加入購物車失敗，請稍後再試', 'error');
+        }
       } else {
-        this.showAlert();
+        showFailAlert();
       }
-      this.quality = 1;
+      this.qty = 1;
     },
-    getSameProduct (sameCategory) {
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/products?category=${sameCategory}`)
-        .then(res => {
-          this.sameProduct = res.data.products;
-          this.sameProduct = this.sameProduct.filter(item => { // 不要抓到目前的產品，只要抓到同一個目錄的其他產品
-            return item.id !== this.$route.params.id;
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async getSameProduct (sameCategory) {
+      try {
+        const products = await getSameProducts(sameCategory);
+        this.sameProduct = products.filter(item => item.id !== this.$route.params.id);
+      } catch {
+        swal.fire('', '類似商品載入失敗', 'error');
+      }
     }
   },
-  watch: {
-    $route (to) {
-      this.pageId = to.params.id;
-      this.getProductInformation(this.pageId);
-    }
+  beforeRouteUpdate (to) {
+    this.pageId = to.params.id;
+    this.getProductInformation(this.pageId);
   },
   mounted () {
     this.getProductInformation(this.$route.params.id);
@@ -165,46 +150,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-button{
-  font-size:1.5rem;
-  border:1px solid white;
-}
-button:hover{
-  background-color: #627364;
-}
-.content{
-  white-space: pre-wrap;
-}
-.card{
-  position: relative;
-}
-.over{
-  position: absolute;
-  top:40%;
-  font-size:2rem;
-  display: none;
-  z-index:1;
-    .link{
-      text-decoration: none;
-    }
-}
-.pic{
-  overflow: hidden;
-    img{
-      transition: all 1s 0s ease;
-    }
-}
-.card:hover .card-img{
-  filter: contrast(50%);
-  transform: scale(1.1);
-}
-.card:hover .over{
-  display: inline-block;
-}
+@import '../assets/stylesheets/views/product-information';
 </style>

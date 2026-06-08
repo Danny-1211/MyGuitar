@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="row justify-content-center my-2">
-      <div class="userMessage col-10">
+      <div class="userMessage col-10 text-start border-top border-info pt-4">
         <h5 class="text-success">訂購人</h5>
         <p>姓名: {{ user.name }}</p>
         <p>電話: {{ user.tel }}</p>
@@ -41,14 +41,14 @@
       </div>
     </div>
     <div class="row justify-content-center mt-2">
-      <div class="userMessage col-10">
+      <div class="userMessage col-10 text-start border-top border-info pt-4">
         <h5 class="text-success">訂購商品明細</h5>
         <ResultTable :cart-product="orderProductForTable" :cart-total="orderData.total" />
       </div>
     </div>
     <div class="row justify-content-end my-3">
       <div class="col-5">
-        <button class="btn btn-lg px-3 py-2" type="button" @click="payOrder(this.$route.params.orderId)">確認付款</button>
+        <button class="btn btn-lg px-3 py-2 text-center border border-info text-info" type="button" @click="payOrder($route.params.orderId)">確認付款</button>
       </div>
     </div>
   </div>
@@ -58,6 +58,9 @@
 <script>
 import ResultTable from '@/components/ResultTable.vue';
 import ApiLoading from '@/components/ApiLoading.vue';
+import swal from '@/utils/swal.js';
+import { getOrderById, payOrder as submitPayment } from '@/controllers/OrderController';
+import { withLoading } from '@/utils/useAsyncData.js';
 export default {
   components: {
     ResultTable,
@@ -74,28 +77,25 @@ export default {
     goHeadPage () {
       this.$router.push('/');
     },
-    getOrderInformation (orderId) {
-      this.$refs.load.doAjax();
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order/${orderId}`)
-        .then(res => {
-          this.orderData = res.data.order;
-          this.user = res.data.order.user;
-          this.orderProductForTable = res.data.order.products;
-          this.$refs.load.timeIsOut();
-        })
-        .catch(err => {
-          console.log(err);
-          this.$refs.load.timeIsOut();
-        });
+    async getOrderInformation (orderId) {
+      await withLoading(
+        this.$refs.load,
+        async () => {
+          const order = await getOrderById(orderId);
+          this.orderData = order;
+          this.user = order.user;
+          this.orderProductForTable = order.products;
+        },
+        '訂單載入失敗，請稍後再試'
+      );
     },
-    payOrder (orderId) {
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/pay/${orderId}`)
-        .then(res => {
-          this.$router.push('/success');
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async payOrder (orderId) {
+      try {
+        await submitPayment(orderId);
+        this.$router.push('/success');
+      } catch {
+        swal.fire('', '付款失敗，請稍後再試', 'error');
+      }
     }
   },
   mounted () {
@@ -105,34 +105,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing: border-box;
-}
-.orderTip{
-  h3{
-    margin-bottom: 1.5rem;
-  }
-}
-.userMessage{
-  text-align:left;
-  border-top:1px #627364 solid;
-    h5{
-      padding-top:1.5rem;
-    }
-    p{
-      padding-top:1.5rem;
-    }
-}
-button{
-  text-align: center;
-  font-size:1rem;
-  color:#627364;
-  border: 1px solid #627364;
-}
-button:hover{
-  background-color: #51423C;
-  color:white;
-}
+@import '../assets/stylesheets/views/result';
 </style>
