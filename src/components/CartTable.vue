@@ -17,7 +17,7 @@
               <td class="col-2">{{item.qty}}</td>
               <td>{{ item.product.price }}</td>
               <td><button type="button" class="btn btn-sm px-2 py-1 text-info" @click="openModal(item)">修改</button></td>
-              <td><button type="button" class="btn btn-danger"   @click="openTip(item)" ><img src="../assets/img/delete_white_24dp.svg" alt="刪除單個商品" srcset=""></button></td>
+              <td><button type="button" class="btn btn-danger" @click="confirmDelete(item)"><img src="../assets/img/delete_white_24dp.svg" alt="刪除單個商品" srcset=""></button></td>
             </tr>
           </tbody>
           <tfoot>
@@ -39,70 +39,49 @@
       </div>
     </div>
   </div>
-  <UpdateModal ref="edit" :temp-product="SingleProductForModal" @get-cart="getCartOrderEmit" />
-  <DeleteSureMessageAlert ref="sureDelete" :item="SingleProductForModal" @delete-cart="deleteCartEmit (SingleProductForModal)" />
+  <UpdateModal ref="edit" :temp-product="selectedItem" @get-cart="getCartOrderEmit" />
 </template>
 
 <script>
 import UpdateModal from '@/components/UpdateCartModal.vue';
-import DeleteSureMessageAlert from '@/components/DeleteSureMessageAlert.vue';
+import { showConfirm } from '@/utils/useAlert.js';
 export default {
   emits: ['delete-cart', 'get-cart-order'],
-  props: ['getCart'],
+  props: {
+    cartData: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
-    UpdateModal,
-    DeleteSureMessageAlert
+    UpdateModal
   },
   data () {
     return {
-      cartData: this.getCart,
-      SingleProductForModal: { imagesUrl: [] } // 給修改 modal 跟刪除 tip 所使用，用來存 CartTable 的每一筆產品資訊
+      selectedItem: { imagesUrl: [] }
     };
   },
-  watch: {
-    getCart: function () {
-      if (this.cartData !== this.getCart) {
-        this.cartData = this.getCart;
-      }
-    }
-  },
   methods: {
-    deleteCartEmit (item) {
-      this.$emit('delete-cart', item);
+    confirmDelete (item) {
+      this.selectedItem = { ...item };
+      showConfirm('將此商品刪除', '此商品已被刪除', () => {
+        this.$emit('delete-cart', item);
+      });
     },
     goProduct () {
       this.$router.push('/productList');
-    },
-    openTip (item) {
-      this.SingleProductForModal = { ...item };
-      this.$refs.sureDelete.tip();
     },
     getCartOrderEmit () {
       this.$emit('get-cart-order');
     },
     openModal (item) {
-      this.SingleProductForModal = { ...item };
+      this.selectedItem = { ...item };
       this.$refs.edit.openModal();
     }
-  },
-  mounted () {
-    this.cartData = this.getCart;
-    console.log(this.cartData);
   }
 };
 </script>
 
 <style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing:border-box;
-}
-button{
-  text-align: center;
-}
-button:hover{
-  background-color: #51423C;
-  color:white;
-}
+@import '../assets/stylesheets/components/cart-table';
 </style>

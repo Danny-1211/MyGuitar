@@ -1,0 +1,64 @@
+.banner {
+  height: 70vh;
+  background-image: url('~@/assets/img/banner3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 75%;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  width: calc(100% + 1.5rem);
+}
+.bannerText {
+  top: 40%;
+  right: 10%;
+  left: 10%;
+}
+.introduction {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  width: calc(100% + 1.5rem);
+}
+.goProduct {
+  transition: all 1s 0s ease;
+}
+.goProduct:hover {
+  transform: scale(1.2);
+}
+.title {
+  font-family: 'Comforter Brush', cursive;
+}
+.item {
+  height: 45vh;
+}
+.item a:hover {
+  color: #627364;
+  transform: scale(1.2);
+  transition: all 1s 0s ease;
+}
+.article {
+  height: 45vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, .6);
+  background-blend-mode: multiply;
+}
+.article a:hover {
+  color: #627364;
+  transform: scale(1.2);
+  transition: all 1s 0s ease;
+}
+.coupon {
+  height: 35vh;
+  background-image: url('~@/assets/img/de-an-sun-b57RqS-nQ1c-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, .6);
+  background-blend-mode: multiply;
+}
+.guitar {
+  width: 200px;
+  height: 200px;
+}

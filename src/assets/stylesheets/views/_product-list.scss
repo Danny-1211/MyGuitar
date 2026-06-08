@@ -1,0 +1,29 @@
+.banner {
+  height: 60vh;
+  background-image: url('~@/assets/img/kari-shea-YCQFgqOzLmU-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  width: calc(100% + 1.5rem);
+}
+.selectCategory {
+  border: solid 2px #51423C;
+}
+.over {
+  top: 30%;
+  font-size: 2rem;
+  display: none;
+  z-index: 1;
+}
+.pic img {
+  transition: all 1s 0s ease;
+}
+.card:hover .card-img {
+  filter: contrast(50%);
+  transform: scale(1.1);
+}
+.card:hover .over {
+  display: inline-block;
+}
