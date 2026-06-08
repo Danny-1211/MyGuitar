@@ -9,7 +9,7 @@
     <div class="col-12 col-md-12 col-lg-4 col-sm-12">
       <div class="buttonG">
         <img src="../assets/img/arrow_back_ios_white_24dp.svg" alt="arrow">
-        <button class="goProductbtn btn btn-lg px-3 py-2" type="button" id="continue" @click="goProductList()">繼續選購</button>
+        <button class="goProductbtn fs-4 btn btn-lg px-3 py-2 text-center text-info" type="button" id="continue" @click="goProductList()">繼續選購</button>
       </div>
     </div>
     </div>
@@ -27,13 +27,13 @@
       </div>
     </div>
     <div class="row"> <!--cartTable-->
-      <CartTable :get-cart="cartData" @delete-cart="deleteCart" @get-cart-order="getCartList" />
+      <CartTable :cart-data="cartData" @delete-cart="deleteCart" @get-cart-order="getCartList" />
     </div>
     <div class="row justify-content-center pt-5 px-5">
       <div class="col-12 col-sm-12 col-lg-5 col-md-10">
         <div class="input-group input-group-lg">
           <input type="text" class="form-control text-info ps-2" v-model="couponInput" placeholder="試試 MyGuiTar555" aria-label="coupon" aria-describedby="button-addon2">
-          <button class="actionBtn btn btn-outline" type="button button-outline px-3 py-2" id="button-addon2" @click="useCoupon(couponInput)">送出</button>
+          <button class="actionBtn btn btn-outline px-3 py-2 text-center text-info border border-info" type="button" id="button-addon2" @click="useCoupon(couponInput)">送出</button>
         </div>
         <label class="form-check-label" id="couponCheck"  v-if="couponBoolean">
           <p class="text-danger">請輸入優惠碼:MyGuiTar555</p>
@@ -49,24 +49,24 @@
     </div>
     <div class="row justify-content-end ">
       <div class="col-12 col-sm-12 col-md-12 col-lg-4">
-        <div class="next justify-content-start">
-          <button type="button" class="actionBtn btn btn-lg px-3 py-2 mx-2" :disabled="clearAllCartBoolean === false" @click="openDeleteAllTip">清空購物車</button>
+        <div class="next d-flex justify-content-center p-4">
+          <button type="button" class="actionBtn btn btn-lg px-3 py-2 mx-2 text-center text-info border border-info" :disabled="clearAllCartBoolean === false" @click="confirmClearAll">清空購物車</button>
           <button type="button" class="btn btn-lg btn-primary px-3 py-2 mx-2" @click="goForm()">下一步</button>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-12 col-sm-12 col-lg-12 col-md-12">
-        <div class="notification p-5 bg-warning">
-          <div class="buy">
-            <h3>訂購須知</h3>
+        <div class="notification p-5 bg-warning text-start">
+          <div class="buy mb-4">
+            <h3 class="mb-3">訂購須知</h3>
             <p>* 請確認所填寫的資料是否正確，下單後無法修改</p>
             <p>* 本店商品統一付款後5個工作日內出貨(不含假日)</p>
             <p>* 若為訂製商品，則不受前項須知限制</p>
             <p>* 本店目前只支援信用卡付款</p>
           </div>
           <div class="back">
-            <h3>退(換)/貨(款)須知</h3>
+            <h3 class="mb-3">退(換)/貨(款)須知</h3>
             <p>* 依《消費者保護法》規定，消費者享有商品簽收翌日起算7天之鑑賞期，欲退購者請於7日內提出</p>
             <p>* 若商品為客製化等訂製商品 (客製化吉他或其它配件) ，不接受其退貨</p>
             <p>* 商品本身具瑕疵或品質不良，且非人為因素損壞者，經判定無誤後可全額退款，不須負擔運費</p>
@@ -75,31 +75,30 @@
       </div>
     </div>
   </div>
-  <DeleteAllCartMessage ref="deleteall" @delete-all="deleteAllCart" />
   <ApiLoading ref="load" />
 </template>
 
 <script>
 import CartTable from '@/components/CartTable.vue';
 import ApiLoading from '@/components/ApiLoading.vue';
-import DeleteAllCartMessage from '@/components/DeleteAllCartMessage.vue';
-import NoCartCantGoFromAlert from '@/utils/noCartCantGoFromAlert.js';
 import emitter from '@/utils/emitter.js';
+import swal from '@/utils/swal.js';
+import { getCart, deleteCartItem, deleteAllCart as clearAllCart, applyCoupon } from '@/controllers/CartController';
+import { withLoading } from '@/utils/useAsyncData.js';
+import { showNoCartAlert, showConfirm } from '@/utils/useAlert.js';
 export default {
-  mixins: [NoCartCantGoFromAlert],
   components: {
     CartTable,
-    ApiLoading,
-    DeleteAllCartMessage
+    ApiLoading
   },
   data () {
     return {
-      cartData: [],
+      cartData: { carts: [], final_total: 0 },
       couponInput: '',
       couponCheck: '',
       clearAllCartBoolean: false,
-      couponBoolean: true, // 一開始優惠卷提示
-      errorCouponMessage: false, // 輸入錯誤優惠卷
+      couponBoolean: true,
+      errorCouponMessage: false,
       rightCoupon: false
     };
   },
@@ -109,73 +108,56 @@ export default {
     },
     goForm () {
       if (this.cartData.carts.length === 0) {
-        this.openNoCartTip();
+        showNoCartAlert();
       } else {
         this.$router.push('/form');
       }
     },
-    getCartList () {
-      this.$refs.load.doAjax();
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
-        .then(res => {
-          this.cartData = res.data.data;
-          if (this.cartData.carts.length !== 0) {
-            this.clearAllCartBoolean = true;
-          } else {
-            this.clearAllCartBoolean = false;
-          }
-          this.$refs.load.timeIsOut();
-        })
-        .catch(err => {
-          console.log(err);
-          this.$refs.load.timeIsOut();
-        });
+    async getCartList () {
+      await withLoading(
+        this.$refs.load,
+        async () => {
+          this.cartData = await getCart();
+          this.clearAllCartBoolean = this.cartData.carts.length !== 0;
+        },
+        '購物車載入失敗，請稍後再試'
+      );
     },
-    deleteCart (item) {
-      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart/${item.id}`)
-        .then(res => {
-          this.getCartList();
-          emitter.emit('get-cart');
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async deleteCart (item) {
+      try {
+        await deleteCartItem(item.id);
+        this.getCartList();
+        emitter.emit('get-cart');
+      } catch {
+        swal.fire('', '刪除失敗，請稍後再試', 'error');
+      }
     },
-    deleteAllCart () {
-      this.$http.delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/carts`)
-        .then(res => {
-          this.getCartList();
-          emitter.emit('get-cart');
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    confirmClearAll () {
+      showConfirm('刪除全部購物車', '購物車全刪除!', () => this.deleteAllCart());
     },
-    useCoupon (couponInput) {
-      const data = {
-        code: couponInput
-      };
-      this.$http.post(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/coupon`, { data: data })
-        .then(res => {
-          this.$refs.load.doAjax();
-          this.couponCheck = res.data;
+    async deleteAllCart () {
+      try {
+        await clearAllCart();
+        this.getCartList();
+        emitter.emit('get-cart');
+      } catch {
+        swal.fire('', '清空購物車失敗，請稍後再試', 'error');
+      }
+    },
+    async useCoupon (couponInput) {
+      try {
+        await withLoading(this.$refs.load, async () => {
+          this.couponCheck = await applyCoupon(couponInput);
           this.couponBoolean = false;
           this.rightCoupon = true;
           this.getCartList();
           emitter.emit('get-cart');
-        })
-        .catch(err => {
-          console.log(err);
-          this.errorCouponMessage = true;
-          this.couponBoolean = false;
-          this.rightCoupon = false;
         });
-    },
-    openDeleteAllTip () {
-      this.$refs.deleteall.tip();
-    },
-    openNoCartTip () {
-      this.noCartTip();
+      } catch {
+        this.errorCouponMessage = true;
+        this.couponBoolean = false;
+        this.rightCoupon = false;
+      }
     }
   },
   mounted () {
@@ -191,49 +173,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing:border-box;
-}
-.goProductbtn {
-  text-align: center;
-  font-size:1.5rem;
-  color:#627364;
-  transition:all 1s 0s ;
-}
-.goProductbtn:hover{
-  background-color: #51423C;
-  color:white;
-}
-.actionBtn{
-  text-align: center;
-  font-size:20px;
-  color:#627364;
-  border: 1px solid #627364;
-}
-.actionBtn:hover{
-  background-color: #627364;
-  color:white;
-}
-.next{
-  display:flex;
-  justify-content: center;
-  padding:1.5rem;
-}
-.notification{
-  text-align: left;
-    .buy{
-      margin-bottom: 1rem;
-    }
-    h3{
-      margin-bottom: 1rem;
-    }
-}
-#continue{
-  color:white;
-}
-#continue:hover{
-  background-color: #627364;
-}
+@import '../assets/stylesheets/views/order';
 </style>

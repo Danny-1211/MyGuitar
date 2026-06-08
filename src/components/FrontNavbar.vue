@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid">
     <div class="row justify-content-center ">
-      <nav class="navbar navbar-expand-lg  fixed-top  navbar-dark bg-secondary  opacity-75 fs-6 ">
-        <router-link to="/" class="navbar-brand mx-4  text-white ">MyGuitar</router-link>
+      <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-secondary opacity-75 fs-6 px-3">
+        <router-link to="/" class="navbar-brand fs-2 mx-4  text-white ">MyGuitar</router-link>
         <button class="navbar-toggler " type="button" @click="toggleHam" >
           <span class="navbar-toggler-icon" ></span>
         </button>
@@ -41,6 +41,7 @@
 import emitter from '@/utils/emitter.js';
 import ShowCart from '@/components/ShowCart.vue';
 import Collapse from 'bootstrap/js/dist/collapse';
+import { getCart } from '@/controllers/CartController';
 export default {
   components: {
     ShowCart
@@ -51,20 +52,13 @@ export default {
     };
   },
   methods: {
-    data () {
-      return {
-        navbar: '',
-        collapse: ''
-      };
-    },
-    getCartList () {
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`)
-        .then(res => {
-          this.cartList = res.data.data.carts;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    async getCartList () {
+      try {
+        const cart = await getCart();
+        this.cartList = cart.carts;
+      } catch (err) {
+        this.$swal('', '購物車載入失敗', 'error');
+      }
     },
     closeHam () {
       this.collapse.hide();
@@ -79,21 +73,12 @@ export default {
       this.getCartList();
     });
     this.collapse = new Collapse(this.$refs.collapse, { toggle: false });
+  },
+  unmounted () {
+    emitter.off('get-cart');
   }
 };
 </script>
 <style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing:border-box;
-}
-.navbar{
-  height:10vh;
-  padding:20px;
-}
-.navbar-brand{
-  font-family: 'Comforter Brush', cursive;
-  font-size:2rem;
-}
+@import '../assets/stylesheets/components/front-navbar';
 </style>

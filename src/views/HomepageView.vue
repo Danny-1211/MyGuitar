@@ -2,24 +2,24 @@
   <div class="container-fluid">
     <div class="row "> <!--banner-->
       <div class="col-12 col-md-12">
-        <div class="banner ">
-          <div class="bannerText">
-            <h1 class="text-primary">找到屬於自己的吉他吧!</h1>
-            <button type="button" class=" goProduct btn btn-lg px-4 py-3 bg-info text-white" @click="goProductList">前往逛逛</button>
+        <div class="banner position-relative">
+          <div class="bannerText position-absolute">
+            <h1 class="text-primary fs-1 mb-4">找到屬於自己的吉他吧!</h1>
+            <button type="button" class="goProduct fs-2 btn btn-lg px-4 py-3 bg-info text-white text-center shadow rounded-pill" @click="goProductList">前往逛逛</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="introduction my-6 bg-primary"> <!--about me-->
-      <div class="introTitle text-white">
+    <div class="introduction p-5 bg-primary"> <!--about me-->
+      <div class="introTitle d-flex justify-content-center fs-2 mb-4 text-white">
         <p>關於</p>
-        <p class="title">MyGuitar</p>
+        <p class="title ms-3">MyGuitar</p>
       </div>
-      <div class="introGraph text-white">
+      <div class="introGraph mb-4 lh-lg text-white">
         <p>喜歡彈吉他的人總是有一個夢想，想要在自己家的置物間充滿各式各樣的吉他，依照心情享受每把吉他不一樣的美妙音色</p>
         <p>MyGuitar 是一間木吉他專賣店，擁有全世界各式各樣的木吉他供你選擇，從平價到奢華應有盡有</p>
       </div>
-      <div class="introFooter text-white">
+      <div class="introFooter fs-4 text-white">
         <p>快帶上你的吉他<br>展開一段你的音樂旅程吧!</p>
       </div>
     </div>
@@ -30,41 +30,41 @@
     </div>
     <div class="row justify-content-center px-5 py-5  bg-primary"> <!--商品按鈕-->
       <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3 mb-4">
-        <router-link to="/productList/Martin">
-          <div class=" item card text-white bg-primary border-0 opacity-75 ">
+        <router-link to="/productList/Martin" class="text-decoration-none">
+          <div class="item card text-white bg-primary border-0 opacity-75 d-flex align-items-center justify-content-center">
             <img src="../assets/img/adi-goldstein-vH2vj_3_IeU-unsplash.jpg" class="card-img w-100" alt="Martin">
-            <div class="card-img-overlay justify-content-center   d-flex align-items-center">
-              <router-link to="/productList/Martin">夢想- <br> Martin</router-link>
+            <div class="card-img-overlay d-flex justify-content-center align-items-center">
+              <router-link to="/productList/Martin" class="fs-2 text-white text-decoration-none">夢想- <br> Martin</router-link>
             </div>
           </div>
         </router-link>
       </div>
       <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3 mb-4">
-        <router-link to="/productList/Dowina">
-          <div class=" item card text-white bg-primary border-0 opacity-75">
+        <router-link to="/productList/Dowina" class="text-decoration-none">
+          <div class="item card text-white bg-primary border-0 opacity-75 d-flex align-items-center justify-content-center">
             <img src="../assets/img/Dollarphotoclub_67587098-1536x1017.jpg" class="card-img w-100" alt="Dowina">
-            <div class="card-img-overlay justify-content-center d-flex align-items-center">
-              <router-link to="/productList/Dowina">優雅- <br> Dowina</router-link>
+            <div class="card-img-overlay d-flex justify-content-center align-items-center">
+              <router-link to="/productList/Dowina" class="fs-2 text-white text-decoration-none">優雅- <br> Dowina</router-link>
             </div>
           </div>
         </router-link>
       </div>
       <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3">
-        <router-link to="/productList/Eastman">
-          <div class=" item card text-white bg-primary border-0 opacity-75">
+        <router-link to="/productList/Eastman" class="text-decoration-none">
+          <div class="item card text-white bg-primary border-0 opacity-75 d-flex align-items-center justify-content-center">
             <img src="../assets/img/eastman.jpg" class="card-img w-100" alt="Eastman">
-            <div class="card-img-overlay justify-content-center d-flex align-items-center">
-              <router-link to="/productList/Eastman">實惠- <br> Eastman</router-link>
+            <div class="card-img-overlay d-flex justify-content-center align-items-center">
+              <router-link to="/productList/Eastman" class="fs-2 text-white text-decoration-none">實惠- <br> Eastman</router-link>
             </div>
           </div>
         </router-link>
       </div>
-      <div class="col-12  col-sm-12 col-lg-5 col-md-12 mt-3 ">
-        <router-link to="/productList/Pre-war">
-          <div class=" item card text-white bg-primary border-0 opacity-75">
+      <div class="col-12 col-sm-12 col-lg-5 col-md-12 mt-3">
+        <router-link to="/productList/Pre-war" class="text-decoration-none">
+          <div class="item card text-white bg-primary border-0 opacity-75 d-flex align-items-center justify-content-center">
             <img src="../assets/img/pre-war.jpg" class="card-img w-100" alt="Pre-war">
-            <div class="card-img-overlay justify-content-center d-flex align-items-center">
-              <router-link to="/productList/Pre-war">復古- <br> Pre-war</router-link>
+            <div class="card-img-overlay d-flex justify-content-center align-items-center">
+              <router-link to="/productList/Pre-war" class="fs-2 text-white text-decoration-none">復古- <br> Pre-war</router-link>
             </div>
           </div>
         </router-link>
@@ -77,8 +77,8 @@
     </div>
     <div class="row justify-content-around px-5 py-5 bg-primary"> <!--文章-->
       <div class="col-12 col-md-3" v-for="item in articleData" :key="item.id">
-        <div class="article" :style="{ backgroundImage: `url(${item.image})` }" >
-          <router-link :to="`/articleList/${ item.id }`">{{ item.title }}</router-link>
+        <div class="article d-flex align-items-center justify-content-center" :style="{ backgroundImage: `url(${item.image})` }">
+          <router-link :to="`/articleList/${ item.id }`" class="fs-5 text-white text-decoration-none">{{ item.title }}</router-link>
         </div>
       </div>
     </div>
@@ -89,7 +89,7 @@
     </div>
     <div class="row justify-content-center bg-primary">
       <div class="col-6 col-sm-12 col-lg-6 col-md-6 mt-3">
-        <img src="../assets/img/raquel-moss-QRjWwQTa0Xo-unsplash.jpg" alt="guitar" class="guitar">
+        <img src="../assets/img/raquel-moss-QRjWwQTa0Xo-unsplash.jpg" alt="guitar" class="guitar object-fit-cover rounded-circle overflow-hidden">
       </div>
       <div class="col-sm-12 col-lg-6 col-md-6 text-start mt-1 px-5 py-5 border-top"> <!--理念1-->
         <h3 class="my-3 fw-bold text-white ">原廠進貨品質優良</h3>
@@ -104,12 +104,12 @@
         <p class="text-white">——每位吉他手都有自己對於吉他的堅持，出貨前依照吉他手的習慣進行調整提供最佳體驗</p>
       </div>
       <div class="col-6 col-sm-12 col-lg-6 col-md-6 mt-3">
-        <img src="../assets/img/fix.jpg" alt="fix" class="guitar">
+        <img src="../assets/img/fix.jpg" alt="fix" class="guitar object-fit-cover rounded-circle overflow-hidden">
       </div>
     </div>
     <div class="row  pt-2 bg-primary"> <!--折扣碼-->
       <div class="col-12 col-md-12">
-        <div class="coupon">
+        <div class="coupon d-flex align-items-center justify-content-center">
           <h2 class="text-white fs-2"> 輸入折扣碼 ，即可享受 95 折 <br> 折扣碼: MyGuiTar555</h2>
         </div>
       </div>
@@ -120,31 +120,27 @@
 
 <script>
 import ApiLoading from '@/components/ApiLoading.vue';
+import { getArticles } from '@/controllers/ArticleController';
+import { withLoading } from '@/utils/useAsyncData.js';
 export default {
   components: {
     ApiLoading
   },
   data () {
     return {
-      articleData: [],
-      bgcImg: 'background-image: url'
+      articleData: []
     };
   },
   methods: {
     goProductList () {
       this.$router.push('/productList');
     },
-    getArticle () {
-      this.$refs.load.doAjax();
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/articles`)
-        .then(res => {
-          this.articleData = res.data.articles;
-          this.$refs.load.timeIsOut();
-        })
-        .catch(err => {
-          console.log(err);
-          this.$refs.load.timeIsOut();
-        });
+    async getArticle () {
+      await withLoading(
+        this.$refs.load,
+        async () => { this.articleData = await getArticles(); },
+        '文章載入失敗，請稍後再試'
+      );
     }
   },
   mounted () {
@@ -154,120 +150,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-*{
-  padding:0;
-  box-sizing: border-box;
-  margin: 0 ;
-}
-.container-fluid{
-  .banner{
-    height: 70vh;
-    background-image: url('../assets/img/banner3.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 75%;
-    position: relative;
-      .bannerText{
-        position: absolute;
-        top:40%;
-        right:10%;
-        left:10%;
-        h1{
-          font-size: 3.5rem;
-          margin-bottom: 1.5rem;
-        }
-        .goProduct {
-          text-align: center;
-          font-size:2rem;
-          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-          border-radius: 100px;
-          transition: all 1s 0s ease;
-        }
-        .goProduct:hover{
-          transform: scale(1.2);
-        }
-      }
-  }
-  .introduction{
-    padding:2.5rem;
-      .introTitle{
-        display: flex;
-        justify-content: center;
-        font-size:3rem;
-        margin-bottom:1.5rem;
-        .title{
-          margin-left:1.5rem;
-          font-family: 'Comforter Brush', cursive;
-        }
-      }
-      .introGraph{
-        font-size:1rem;
-        line-height: 2rem;
-        margin-bottom:1.5rem;
-      }
-      .introFooter{
-        font-size:2rem;
-      }
-  }
-  .item{
-    height:45vh;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-      a{
-        font-size:2.5rem;
-        color:white;
-        text-decoration: none;
-      }
-      a:hover{
-        color:#627364;
-        transform: scale(1.2);
-        transition: all 1s 0s ease;
-      }
-  }
-  .article{
-    height:45vh;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: rgba(0, 0, 0, .6);
-    background-blend-mode: multiply;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-      a{
-        font-size:1.5rem;
-        color:white;
-        text-decoration: none;
-      }
-      a:hover{
-        color:#627364;
-        transform: scale(1.2);
-        transition: all 1s 0s ease;
-      }
-  }
-  .coupon{
-    height:35vh;
-    background-image: url('../assets/img/de-an-sun-b57RqS-nQ1c-unsplash.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: rgba(0, 0, 0, .6);
-    background-blend-mode: multiply;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .guitar{
-    width:200px;
-    height:200px;
-    overflow: hidden;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  h2{
-    font-size:2.5rem;
-  }
-}
+@import '../assets/stylesheets/views/homepage';
 </style>

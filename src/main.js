@@ -20,7 +20,7 @@ app.use(VuePlyr, {
   plyr: {}
 });
 app.use(VueSweetalert2, options);
-router.afterEach((to, from, next) => {
+router.afterEach((to) => {
   window.scrollTo(0, 0);
 });
 app.mount('#app');

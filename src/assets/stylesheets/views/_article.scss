@@ -1,0 +1,17 @@
+.banner {
+  height: 50vh;
+  background-image: url('~@/assets/img/nii-a_sjYst1xJo-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 85%;
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  width: calc(100% + 1.5rem);
+}
+.articleText a {
+  transition: all 1s 0s ease;
+}
+.articleText a:hover {
+  color: #627364;
+}

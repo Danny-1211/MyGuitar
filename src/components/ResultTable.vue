@@ -10,7 +10,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in cartProductData" :key="item+123456">
+          <tr v-for="item in cartProductData" :key="item.id">
             <td >{{ item.product.title }}</td>
             <td class="col-2">{{ item.qty }}</td>
             <td>{{Math.round( item.final_total )}}</td>
@@ -31,7 +31,16 @@
 
 <script>
 export default {
-  props: ['cartProduct', 'cartTotal'],
+  props: {
+    cartProduct: {
+      type: Object,
+      required: true
+    },
+    cartTotal: {
+      type: Number,
+      default: 0
+    }
+  },
   data () {
     return {
       cartProductData: this.cartProduct,
@@ -50,16 +59,6 @@ export default {
         this.total = this.cartTotal;
       }
     }
-  },
-  mounted () {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-*{
-  padding:0;
-  margin:0;
-  box-sizing:border-box;
-}
-</style>

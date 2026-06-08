@@ -1,0 +1,22 @@
+button:hover {
+  background-color: #627364;
+}
+.content {
+  white-space: pre-wrap;
+}
+.over {
+  top: 40%;
+  font-size: 2rem;
+  display: none;
+  z-index: 1;
+}
+.pic img {
+  transition: all 1s 0s ease;
+}
+.card:hover .card-img {
+  filter: contrast(50%);
+  transform: scale(1.1);
+}
+.card:hover .over {
+  display: inline-block;
+}
