@@ -38,28 +38,19 @@
 </template>
 
 <script>
-import emitter from '@/utils/emitter.js';
 import ShowCart from '@/components/ShowCart.vue';
 import Collapse from 'bootstrap/js/dist/collapse';
-import { getCart } from '@/controllers/CartController';
+import { mapState, mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 export default {
   components: {
     ShowCart
   },
-  data () {
-    return {
-      cartList: []
-    };
+  computed: {
+    ...mapState(useCartStore, ['cartList'])
   },
   methods: {
-    async getCartList () {
-      try {
-        const cart = await getCart();
-        this.cartList = cart.carts;
-      } catch (err) {
-        this.$swal('', '購物車載入失敗', 'error');
-      }
-    },
+    ...mapActions(useCartStore, ['fetchCart']),
     closeHam () {
       this.collapse.hide();
     },
@@ -67,15 +58,9 @@ export default {
       this.collapse.toggle();
     }
   },
-  mounted () {
-    this.getCartList();
-    emitter.on('get-cart', () => {
-      this.getCartList();
-    });
+  async mounted () {
+    await this.fetchCart();
     this.collapse = new Collapse(this.$refs.collapse, { toggle: false });
-  },
-  unmounted () {
-    emitter.off('get-cart');
   }
 };
 </script>

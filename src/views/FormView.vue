@@ -56,8 +56,9 @@
 
 <script>
 import { Field, Form as VeeForm, ErrorMessage } from 'vee-validate';
-import emitter from '@/utils/emitter.js';
 import swal from '@/utils/swal.js';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 import { createOrder } from '@/controllers/OrderController';
 import { isRequired, validateEmail, validatePhone } from '@/utils/validators.js';
 export default {
@@ -81,6 +82,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     isRequired,
     validateEmail,
     validatePhone,
@@ -88,7 +90,7 @@ export default {
       this.isSubmitting = true;
       try {
         const result = await createOrder(this.form);
-        emitter.emit('get-cart');
+        await this.fetchCart();
         this.$router.push(`/result/${result.orderId}`);
       } catch {
         swal.fire('', '訂單送出失敗，請稍後再試', 'error');

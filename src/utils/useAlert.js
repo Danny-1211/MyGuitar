@@ -21,10 +21,10 @@ export function showConfirm (text, successText, onConfirm) {
     showCancelButton: true,
     confirmButtonText: '對，刪除!',
     cancelButtonText: '取消'
-  }).then(result => {
+  }).then(async result => {
     if (result.isConfirmed) {
+      await onConfirm();
       swal.fire('刪除!', successText, 'success');
-      onConfirm();
     }
   });
 }

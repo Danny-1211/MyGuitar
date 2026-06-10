@@ -84,8 +84,9 @@
 
 <script>
 import ApiLoading from '@/components/ApiLoading.vue';
-import emitter from '@/utils/emitter.js';
 import swal from '@/utils/swal.js';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 import { getProductById, getSameProducts } from '@/controllers/ProductController';
 import { addToCart } from '@/controllers/CartController';
 import { withLoading } from '@/utils/useAsyncData.js';
@@ -105,6 +106,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     async getProductInformation (productId) {
       await withLoading(
         this.$refs.load,
@@ -121,7 +123,7 @@ export default {
         try {
           await addToCart(item.id, qty);
           showSuccessAlert();
-          emitter.emit('get-cart');
+          await this.fetchCart();
         } catch {
           swal.fire('', '加入購物車失敗，請稍後再試', 'error');
         }
