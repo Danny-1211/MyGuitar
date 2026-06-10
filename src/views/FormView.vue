@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="row py-4 px-4 justify-content-center">
-      <Form ref="form" class="col-md-6 text-start" v-slot="{ errors }" @submit="onSubmit"> <!-- v-slot 把這裡面的方法取出來  -->
+      <VeeForm ref="form" class="col-md-6 text-start" v-slot="{ errors }" @submit="onSubmit"> <!-- v-slot 把這裡面的方法取出來  -->
         <div class="mb-5">
           <label for="email" class="form-label fs-5 text-info mb-2">收件人信箱</label>
           <Field id="email" name="email" type="email" class="form-control text-info ps-2" :rules="validateEmail" :class="{ 'is-invalid': errors['email'] }" placeholder="請輸入 Email" v-model="form.user.email"/>
@@ -49,21 +49,22 @@
         <div class="text-end"> <!-- 先把validate驗證錯誤的 error值(物件)轉成陣列判斷長度，陣列有東西代表驗證有錯誤-->
           <button type="submit" class="btn btn-lg px-3 py-2 text-center border border-info text-info" :disabled="Object.keys(errors).length > 0 || isSubmitting">送出訂單</button>
         </div>
-      </Form>
+      </VeeForm>
     </div>
   </div>
 </template>
 
 <script>
-import { Field, Form, ErrorMessage } from 'vee-validate';
-import emitter from '@/utils/emitter.js';
+import { Field, Form as VeeForm, ErrorMessage } from 'vee-validate';
 import swal from '@/utils/swal.js';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 import { createOrder } from '@/controllers/OrderController';
 import { isRequired, validateEmail, validatePhone } from '@/utils/validators.js';
 export default {
   components: {
     Field,
-    Form,
+    VeeForm,
     ErrorMessage
   },
   data () {
@@ -81,6 +82,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     isRequired,
     validateEmail,
     validatePhone,
@@ -88,7 +90,7 @@ export default {
       this.isSubmitting = true;
       try {
         const result = await createOrder(this.form);
-        emitter.emit('get-cart');
+        await this.fetchCart();
         this.$router.push(`/result/${result.orderId}`);
       } catch {
         swal.fire('', '訂單送出失敗，請稍後再試', 'error');
@@ -96,8 +98,8 @@ export default {
         this.isSubmitting = false;
       }
     },
-    onSubmit () {
-      this.addOrder();
+    async onSubmit () {
+      await this.addOrder();
     }
   }
 };

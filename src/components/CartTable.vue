@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <div class="row justify-content-center pt-5 bg-white"  v-if="cartData.final_total !== 0">
-      <div class="col-10 col-sm-10 col-lg-10 col-md-10">
+    <div class="row justify-content-center  items-center-center pt-5 bg-white"  v-if="cartData.final_total !== 0">
+      <div class="col-10 col-sm-10 col-lg-10 col-md-10 ">
         <table class="table">
           <thead>
             <tr>
@@ -12,12 +12,16 @@
             </tr>
           </thead>
           <tbody >
-            <tr v-for="item in cartData.carts" :key="item.id">
+            <tr v-for="item in cartData.carts" :key="item.id" class="align-middle">
               <td>{{ item.product.title }}</td>
-              <td class="col-2">{{item.qty}}</td>
+              <td class="col-2">{{ item.qty }}</td>
               <td>{{ item.product.price }}</td>
-              <td><button type="button" class="btn btn-sm px-2 py-1 text-info" @click="openModal(item)">修改</button></td>
-              <td><button type="button" class="btn btn-danger" @click="confirmDelete(item)"><img src="../assets/img/delete_white_24dp.svg" alt="刪除單個商品" srcset=""></button></td>
+              <td>
+                <button type="button" class="btn btn-sm px-2 py-1 text-info" @click="openModal(item)">修改</button>
+              </td>
+              <td>
+                  <button type="button" class="btn btn-danger" @click="confirmDelete(item)"><img src="../assets/img/delete_white_24dp.svg" alt="刪除單個商品" srcset=""></button>
+              </td>
             </tr>
           </tbody>
           <tfoot>
@@ -39,14 +43,16 @@
       </div>
     </div>
   </div>
-  <UpdateModal ref="edit" :temp-product="selectedItem" @get-cart="getCartOrderEmit" />
+  <UpdateModal ref="edit" :temp-product="selectedItem" />
 </template>
 
 <script>
 import UpdateModal from '@/components/UpdateCartModal.vue';
 import { showConfirm } from '@/utils/useAlert.js';
+import { deleteCartItem } from '@/controllers/CartController';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 export default {
-  emits: ['delete-cart', 'get-cart-order'],
   props: {
     cartData: {
       type: Object,
@@ -62,17 +68,20 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     confirmDelete (item) {
       this.selectedItem = { ...item };
-      showConfirm('將此商品刪除', '此商品已被刪除', () => {
-        this.$emit('delete-cart', item);
+      showConfirm('將此商品刪除', '此商品已被刪除', async () => {
+        try {
+          await deleteCartItem(item.id);
+          await this.fetchCart();
+        } catch {
+          this.$swal('', '刪除失敗，請稍後再試', 'error');
+        }
       });
     },
     goProduct () {
       this.$router.push('/productList');
-    },
-    getCartOrderEmit () {
-      this.$emit('get-cart-order');
     },
     openModal (item) {
       this.selectedItem = { ...item };

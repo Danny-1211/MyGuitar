@@ -7,9 +7,8 @@ export async function withLoading (loader, fn, errorMsg) {
   } catch (err) {
     if (errorMsg) {
       swal.fire('', errorMsg, 'error');
-    } else {
-      throw err;
     }
+    throw err;
   } finally {
     loader.timeIsOut();
   }

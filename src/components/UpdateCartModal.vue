@@ -12,11 +12,11 @@
               <label for="inputPassword6" class="col-form-label">選擇數量</label>
             </div>
             <div class="col-auto">
-              <input type="number" id="inputnumber6" class="form-control" aria-describedby="passwordHelpInline" v-model="productTemp.qty">
+              <input type="number" id="inputnumber6" class="form-control" min="1" max="20" aria-describedby="passwordHelpInline" v-model="productTemp.qty">
             </div>
             <div class="col-auto">
               <span id="passwordHelpInline" class="form-text">
-                只能輸入 0 ~ 20 數字
+                只能輸入 1 ~ 20 數字
               </span>
             </div>
           </div>
@@ -32,11 +32,12 @@
 
 <script>
 import Modal from 'bootstrap/js/dist/modal.js';
-import emitter from '@/utils/emitter.js';
 import swal from '@/utils/swal.js';
 import { updateCartItem } from '@/controllers/CartController';
 import { showFailAlert, showEditSuccessAlert } from '@/utils/useAlert.js';
 import { validateQuantity } from '@/utils/validators.js';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 export default {
   props: {
     tempProduct: {
@@ -47,24 +48,22 @@ export default {
   data () {
     return {
       editModal: '',
-      productTemp: this.tempProduct
+      productTemp: JSON.parse(JSON.stringify(this.tempProduct))
     };
   },
   watch: {
-    tempProduct: function () {
-      if (this.productTemp.id !== this.tempProduct.id) {
-        this.productTemp = this.tempProduct;
-      }
+    tempProduct (newVal) {
+      this.productTemp = JSON.parse(JSON.stringify(newVal));
     }
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     async editCart (quality) {
       if (validateQuantity(quality)) {
         try {
           await updateCartItem(this.productTemp.id, this.productTemp.product_id, quality);
           showEditSuccessAlert();
-          this.getCart();
-          emitter.emit('get-cart');
+          await this.fetchCart();
         } catch {
           swal.fire('', '修改失敗，請稍後再試', 'error');
         }
@@ -72,9 +71,6 @@ export default {
         showFailAlert();
         this.productTemp.qty = this.tempProduct.qty;
       }
-    },
-    getCart () {
-      this.$emit('get-cart');
     },
     openModal () {
       this.editModal.show();

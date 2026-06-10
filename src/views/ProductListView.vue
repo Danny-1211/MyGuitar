@@ -81,21 +81,30 @@ export default {
         },
         '商品載入失敗，請稍後再試'
       );
-    },
-    async getCategory () {
-      try {
-        const allProducts = await getAllProducts();
+    }
+  },
+  async mounted () {
+    const category = this.$route.params.category || '';
+    await withLoading(
+      this.$refs.load,
+      async () => {
+        const [products, allProducts] = await Promise.all([
+          getProducts(category),
+          getAllProducts()
+        ]);
+        this.products = products;
+        if (category && category !== '全部商品') {
+          this.selected = category;
+          this.$router.push(`/productList/${category}`);
+        } else {
+          this.$router.push('/productList');
+        }
         const totalCategory = allProducts.map(item => item.category);
         this.category = totalCategory.filter((item, i) => totalCategory.indexOf(item) === i);
         this.category.unshift('全部商品');
-      } catch (err) {
-        this.$swal('', '分類載入失敗，請稍後再試', 'error');
-      }
-    }
-  },
-  mounted () {
-    this.getProduct(!this.$route.params.category ? '' : this.$route.params.category);
-    this.getCategory();
+      },
+      '資料載入失敗，請稍後再試'
+    );
   }
 };
 </script>

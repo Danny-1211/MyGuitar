@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import 'bootstrap';
@@ -10,6 +11,7 @@ import VuePlyr from 'vue-plyr';
 import 'vue-plyr/dist/vue-plyr.css';
 
 const app = createApp(App);
+app.use(createPinia());
 app.use(VueAxios, axios);
 app.use(router);
 const options = {
