@@ -98,8 +98,8 @@ export default {
         this.isSubmitting = false;
       }
     },
-    onSubmit () {
-      this.addOrder();
+    async onSubmit () {
+      await this.addOrder();
     }
   }
 };

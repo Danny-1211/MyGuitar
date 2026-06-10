@@ -48,14 +48,12 @@ export default {
   data () {
     return {
       editModal: '',
-      productTemp: this.tempProduct
+      productTemp: JSON.parse(JSON.stringify(this.tempProduct))
     };
   },
   watch: {
-    tempProduct: function () {
-      if (this.productTemp.id !== this.tempProduct.id) {
-        this.productTemp = this.tempProduct;
-      }
+    tempProduct (newVal) {
+      this.productTemp = JSON.parse(JSON.stringify(newVal));
     }
   },
   methods: {

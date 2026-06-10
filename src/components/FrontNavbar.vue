@@ -52,10 +52,10 @@ export default {
   methods: {
     ...mapActions(useCartStore, ['fetchCart']),
     closeHam () {
-      this.collapse.hide();
+      this.collapse?.hide();
     },
     toggleHam () {
-      this.collapse.toggle();
+      this.collapse?.toggle();
     }
   },
   async mounted () {
