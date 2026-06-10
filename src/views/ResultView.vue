@@ -68,8 +68,8 @@ export default {
   },
   data () {
     return {
-      orderData: [],
-      user: {},
+      orderData: {},
+      user: { name: '', tel: '', email: '', address: '', message: '' },
       orderProductForTable: {}
     };
   },

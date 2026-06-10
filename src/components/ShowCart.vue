@@ -5,7 +5,7 @@
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body" >
-      <template v-if="cartList.total !== 0">
+      <template v-if="cartData.carts && cartData.carts.length !== 0">
         <table class="table">
           <thead>
             <tr>
@@ -15,7 +15,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in cartList.carts" :key="item.id">
+            <tr v-for="item in cartData.carts" :key="item.id">
               <td class="col-5">{{ item.product.title }}</td>
               <td class="col-3">{{ item.qty }}</td>
               <td>{{ item.product.price }}</td>
@@ -25,7 +25,7 @@
           <tfoot>
             <tr>
               <td colspan="3" class="text-end text-success">總計</td>
-              <td class="text-end">{{ Math.round(cartList.final_total) }}</td>
+              <td class="text-end">{{ Math.round(cartData.final_total) }}</td>
             </tr>
           </tfoot>
         </table>
@@ -44,46 +44,32 @@
 </template>
 
 <script>
-import emitter from '@/utils/emitter.js';
-import { getCart, deleteCartItem } from '@/controllers/CartController';
+import { deleteCartItem } from '@/controllers/CartController';
+import { mapState, mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 export default {
-  data () {
-    return {
-      cartList: []
-    };
+  computed: {
+    ...mapState(useCartStore, ['cartData'])
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     goProduct () {
       this.$router.push('/productList');
     },
     goOrder () {
       this.$router.push('/order');
     },
-    async getCartList () {
-      try {
-        this.cartList = await getCart();
-      } catch (err) {
-        console.log(err);
-      }
-    },
     async deleteCart (item) {
       try {
         await deleteCartItem(item.id);
-        emitter.emit('get-cart');
-        emitter.emit('delete-cart');
+        await this.fetchCart();
       } catch (err) {
         this.$swal('', '刪除失敗，請稍後再試', 'error');
       }
     }
   },
-  mounted () {
-    this.getCartList();
-    emitter.on('get-cart', () => {
-      this.getCartList();
-    });
-  },
-  unmounted () {
-    emitter.off('get-cart');
+  async mounted () {
+    await this.fetchCart();
   }
 };
 </script>

@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="row"> <!--cartTable-->
-      <CartTable :cart-data="cartData" @delete-cart="deleteCart" @get-cart-order="getCartList" />
+      <CartTable :cart-data="cartData" />
     </div>
     <div class="row justify-content-center pt-5 px-5">
       <div class="col-12 col-sm-12 col-lg-5 col-md-10">
@@ -81,9 +81,10 @@
 <script>
 import CartTable from '@/components/CartTable.vue';
 import ApiLoading from '@/components/ApiLoading.vue';
-import emitter from '@/utils/emitter.js';
 import swal from '@/utils/swal.js';
-import { getCart, deleteCartItem, deleteAllCart as clearAllCart, applyCoupon } from '@/controllers/CartController';
+import { mapState, mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
+import { deleteAllCart as clearAllCart, applyCoupon } from '@/controllers/CartController';
 import { withLoading } from '@/utils/useAsyncData.js';
 import { showNoCartAlert, showConfirm } from '@/utils/useAlert.js';
 export default {
@@ -93,16 +94,24 @@ export default {
   },
   data () {
     return {
-      cartData: { carts: [], final_total: 0 },
       couponInput: '',
       couponCheck: '',
-      clearAllCartBoolean: false,
       couponBoolean: true,
       errorCouponMessage: false,
       rightCoupon: false
     };
   },
+  computed: {
+    ...mapState(useCartStore, ['cartData']),
+    clearAllCartBoolean () {
+      return this.cartData.carts.length !== 0;
+    }
+  },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
+    async loadCart () {
+      await withLoading(this.$refs.load, () => this.fetchCart(), '購物車載入失敗，請稍後再試');
+    },
     goProductList () {
       this.$router.push('/productList');
     },
@@ -113,46 +122,23 @@ export default {
         this.$router.push('/form');
       }
     },
-    async getCartList () {
-      await withLoading(
-        this.$refs.load,
-        async () => {
-          this.cartData = await getCart();
-          this.clearAllCartBoolean = this.cartData.carts.length !== 0;
-        },
-        '購物車載入失敗，請稍後再試'
-      );
-    },
-    async deleteCart (item) {
-      try {
-        await deleteCartItem(item.id);
-        this.getCartList();
-        emitter.emit('get-cart');
-      } catch {
-        swal.fire('', '刪除失敗，請稍後再試', 'error');
-      }
-    },
     confirmClearAll () {
       showConfirm('刪除全部購物車', '購物車全刪除!', () => this.deleteAllCart());
     },
     async deleteAllCart () {
       try {
         await clearAllCart();
-        this.getCartList();
-        emitter.emit('get-cart');
+        await this.loadCart();
       } catch {
         swal.fire('', '清空購物車失敗，請稍後再試', 'error');
       }
     },
     async useCoupon (couponInput) {
       try {
-        await withLoading(this.$refs.load, async () => {
-          this.couponCheck = await applyCoupon(couponInput);
-          this.couponBoolean = false;
-          this.rightCoupon = true;
-          this.getCartList();
-          emitter.emit('get-cart');
-        });
+        this.couponCheck = await applyCoupon(couponInput);
+        this.couponBoolean = false;
+        this.rightCoupon = true;
+        await this.loadCart();
       } catch {
         this.errorCouponMessage = true;
         this.couponBoolean = false;
@@ -161,13 +147,7 @@ export default {
     }
   },
   mounted () {
-    this.getCartList();
-    emitter.on('delete-cart', () => {
-      this.getCartList();
-    });
-  },
-  unmounted () {
-    emitter.off('delete-cart');
+    this.loadCart();
   }
 };
 </script>

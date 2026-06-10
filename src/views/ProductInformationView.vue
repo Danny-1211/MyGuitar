@@ -25,7 +25,7 @@
         <div class="row justify-content-start mb-4">
           <div class="col-sm-12 col-lg-6 col-md-12" style="text-align:left;">
             <div class="input-group input-group-md mb-3">
-              <input type="number" class="form-control input-group-sm fs-5 ps-2 text-info" placeholder="請輸入數量" aria-label="Recipient's username" aria-describedby="button-addon2" v-model="qty">
+              <input type="number" class="form-control input-group-sm fs-5 ps-2 text-info" placeholder="請輸入數量" aria-label="Recipient's username" aria-describedby="button-addon2" min="1" max="20" v-model="qty">
               <button type="button" class="btn btn-lg text-white px-3 py-2 fs-5 border border-white" @click="addCart(information, qty)">
                 加入購物車
               </button>
@@ -84,8 +84,9 @@
 
 <script>
 import ApiLoading from '@/components/ApiLoading.vue';
-import emitter from '@/utils/emitter.js';
 import swal from '@/utils/swal.js';
+import { mapActions } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 import { getProductById, getSameProducts } from '@/controllers/ProductController';
 import { addToCart } from '@/controllers/CartController';
 import { withLoading } from '@/utils/useAsyncData.js';
@@ -105,6 +106,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useCartStore, ['fetchCart']),
     async getProductInformation (productId) {
       await withLoading(
         this.$refs.load,
@@ -121,7 +123,7 @@ export default {
         try {
           await addToCart(item.id, qty);
           showSuccessAlert();
-          emitter.emit('get-cart');
+          await this.fetchCart();
         } catch {
           swal.fire('', '加入購物車失敗，請稍後再試', 'error');
         }
